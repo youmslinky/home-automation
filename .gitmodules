@@ -1,0 +1,3 @@
+[submodule "micropython/tdisplay/micropython-font-to-py"]
+	path = micropython/tdisplay/micropython-font-to-py
+	url = https://github.com/peterhinch/micropython-font-to-py
