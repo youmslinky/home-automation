@@ -22,6 +22,7 @@ pir_event = False
 pir_rise = False
 
 screen_last_display_time = time()
+last_sensor_config_time = time()
 
 def button_change_inter(p):
     global button_event
@@ -107,6 +108,13 @@ except OSError as e:
 
 while True:
     t = time()
+    if t - last_sensor_config_time > 43200: #12hours (12*60*60 seconds)
+        # every 12 hours, send a config command, so home assistant is updated,
+        # not sure how to do this on events, like hass boot up.  maybe hass sends
+        # a mqtt boot up message on mqtt?
+        setup_hass_mqtt_bin_sensors()
+        last_sensor_config_time = time()
+
     if t - screen_last_display_time > 3:
         #blank display if on longer than x sec
         oled.fill(0)
