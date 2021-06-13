@@ -1,0 +1,143 @@
+esphome:
+  name: aquarium
+  platform: ESP32
+  board: ttgo-t-beam
+
+wifi:
+  ssid: "homenet"
+  password: "smallwhitedog"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Aquarium Fallback Hotspot"
+    password: "D2RjBDSW0v2V"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - platform: status
+    name: "Node Status"
+    id: system_status
+
+  - platform: gpio
+    name: "aquarium right button"
+    id: right_button
+    pin:
+      number: 0
+      inverted: True
+      mode: INPUT_PULLUP
+
+  - platform: gpio
+    name: "aquarium left button"
+    id: left_button
+    pin:
+      number: 35
+      inverted: True
+      mode: INPUT_PULLUP
+
+switch:
+  - platform: gpio
+    pin: GPIO4
+    name: "Backlight"
+    id: backlight
+
+dallas:
+    - pin: GPIO2
+      update_interval: 5s
+
+sensor:
+    - platform: dallas
+      address: 0xF93C01E076CA4628
+      name: "aquarium Temperature #1"
+      id: temp_1
+    - platform: dallas
+      address: 0x9B3C01E0767EE428
+      name: "aquarium Temperature #2"
+      id: temp_2
+
+font:
+  - file: "NotoSansMono-Regular.ttf"
+    id: noto_40
+    size: 40 
+  - file: "NotoSansMono-Regular.ttf"
+    id: noto_24
+    size: 24
+  - file: "NotoSansMono-Regular.ttf"
+    id: noto_12
+    size: 12
+
+color:
+  - id: my_red
+    red: 100%
+    green: 0%
+    blue: 0%
+  - id: my_yellow
+    red: 100%
+    green: 100%
+    blue: 0%
+  - id: my_green
+    red: 0%
+    green: 100%
+    blue: 0%
+  - id: my_blue
+    red: 0%
+    green: 0%
+    blue: 100%
+  - id: my_gray
+    red: 50%
+    green: 50%
+    blue: 50%
+
+
+#image:
+#  - file: "image.png"
+#    id: my_image
+#    resize: 200x200
+#    type: RGB24
+
+time:
+  - platform: homeassistant
+    id: esptime
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
+
+display:
+  - platform: st7789v
+    backlight_pin: GPIO4
+    cs_pin: GPIO5
+    dc_pin: GPIO16
+    reset_pin: GPIO23
+    rotation: 90
+    lambda: |-
+      it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
+      it.rectangle(0, 20, it.get_width(), it.get_height(), id(my_blue));   // header bar
+
+      //display date
+      //it.strftime((240 / 2), (140 / 3) * 1 + 5, id(noto_24), id(my_gray), TextAlign::CENTER, "%Y-%m-%d", id(esptime).now());
+      //display time in center
+      //it.strftime((240 / 2), (140 / 3) * 2 + 5, id(noto_40), id(my_gray), TextAlign::CENTER, "%H:%M:%S", id(esptime).now());
+
+      it.printf((240 / 2), (140 / 3) * 2 + 5, id(noto_40), id(my_gray), TextAlign::CENTER, "T2 %.1f°F", id(temp_2).state * (9.0/5.0) + 32.0);
+      it.printf((240 / 2), (140 / 3) * 1 + 5, id(noto_40), id(my_gray), TextAlign::CENTER, "T1 %.1f°F", id(temp_1).state * (9.0/5.0) + 32.0);
+
+      it.print(5, 5, id(noto_12), id(my_yellow), TextAlign::TOP_LEFT, "ESPHome");
+
+      // Comment out the above lines to see the image without text overlaid
+      // it.image(0, 0, id(my_image));
+
+      if (id(system_status).state) {
+        it.print(235, 5, id(noto_12), id(my_green), TextAlign::TOP_RIGHT, "Online");
+      }
+      else {
+        it.print(235, 5, id(noto_12), id(my_red), TextAlign::TOP_RIGHT, "Offline");
+      }
