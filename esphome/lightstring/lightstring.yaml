@@ -1,0 +1,184 @@
+esphome:
+  name: lightstring
+  platform: ESP32
+  board: wemosbat
+
+wifi:
+  ssid: "homenet"
+  password: "smallwhitedog"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Lightstring Fallback Hotspot"
+    password: "p3AsSB2rO51w"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:  #disable native api
+
+ota:
+
+switch:
+    - platform: gpio
+      name: "test switch"
+      id: test_switch
+      pin: 16
+
+#mqtt:
+#    broker: 192.168.1.2
+#    on_message:
+#      - topic: cmnd/lightstring/toggle
+#        qos: 0
+#        then:
+#            - switch.toggle: test_switch
+#      - topic: cmnd/lightstring/light1/red
+#        qos: 0
+#        then:
+#            - light.turn_on:
+#                id: light1
+#                brightness: 100%
+#                red: 100%
+#                green: 0%
+#                blue: 0%
+#                transition_length: 10s
+#      - topic: cmnd/lightstring/light1/green
+#        qos: 0
+#        then:
+#            - light.turn_on:
+#                id: light1
+#                brightness: 100%
+#                red: 0%
+#                green: 100%
+#                blue: 0%
+#                transition_length: 10s
+#      - topic: cmnd/lightstring/light1/blue
+#        qos: 0
+#        then:
+#            - light.turn_on:
+#                id: light1
+#                brightness: 100%
+#                red: 0%
+#                green: 0%
+#                blue: 100%
+#                transition_length: 10s
+#      - topic: cmnd/lightstring/light1/random
+#        qos: 0
+#        then:
+#            - light.turn_on:
+#                id: light1
+#                brightness: 50%
+#                effect: "fast random effect"
+#      - topic: cmnd/lightstring/light1/rainbow
+#        qos: 0
+#        then:
+#            - light.turn_on:
+#                id: light1
+#                brightness: 80%
+#                effect: "Rainbow"
+
+# Example configuration entry
+light:
+  - platform: fastled_clockless
+    chipset: WS2811
+    pin: 13
+    num_leds: 50
+    rgb_order: RGB
+    name: "FastLED WS2811 Light"
+    id: light1
+    effects:
+        - random:
+            name: "fast random effect"
+            transition_length: 1s
+            update_interval: 1s
+        - random:
+            name: "slow random effect"
+            transition_length: 60s
+            update_interval: 60s
+        - addressable_rainbow:
+        - addressable_color_wipe:
+            name: "Christmas color wipe"
+            colors:
+                - red: 100%
+                  green: 0%
+                  blue: 0%
+                  num_leds: 1
+                - red: 30%
+                  green: 30%
+                  blue: 30%
+                  num_leds: 5
+                - red: 0%
+                  green: 100%
+                  blue: 0%
+                  num_leds: 1
+                - red: 30%
+                  green: 30%
+                  blue: 30%
+                  num_leds: 5
+            add_led_interval: 300ms
+        - addressable_twinkle:
+            name: "twinkle current colors"
+            twinkle_probability: 3%
+            progress_interval: 3ms
+        - addressable_fireworks:
+                  name: Fireworks Effect With Custom Values
+                  update_interval: 32ms
+                  spark_probability: 10%
+                  use_random_color: true
+                  fade_out_rate: 80
+
+esp32_ble_tracker:
+sensor:
+  #batman
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:05:E9:56"
+    temperature:
+      name: "Batman Temperature"
+    humidity:
+      name: "Batman Humidity"
+    battery_level:
+      name: "Batman Battery-Level"
+    battery_voltage:
+      name: "Batman Battery-Voltage"
+
+  #Alfred
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:D7:A4:0D"
+    temperature:
+      name: "Alfred Temperature"
+    humidity:
+      name: "Alfred Humidity"
+    battery_level:
+      name: "Alfred Battery-Level"
+    battery_voltage:
+      name: "Alfred Battery-Voltage"
+
+  #bob
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:F2:44:8A"
+    temperature:
+      name: "bob Temperature"
+    humidity:
+      name: "bob Humidity"
+    battery_level:
+      name: "bob Battery-Level"
+    battery_voltage:
+      name: "bob Battery-Voltage"
+
+  #kat
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:62:8C:DA"
+    temperature:
+      name: "kat Temperature"
+    humidity:
+      name: "kat Humidity"
+    battery_level:
+      name: "kat Battery-Level"
+    battery_voltage:
+      name: "kat Battery-Voltage"
+
+web_server:
+   port: 80
