@@ -51,17 +51,27 @@ switch:
 
 dallas:
     - pin: GPIO2
-      update_interval: 5s
+      update_interval: 1s
 
 sensor:
     - platform: dallas
       address: 0xF93C01E076CA4628
       name: "aquarium Temperature #1"
       id: temp_1
+      accuracy_decimals: 2
+      filters:
+      - sliding_window_moving_average:
+          window_size: 15
+          send_every: 5
     - platform: dallas
       address: 0x9B3C01E0767EE428
       name: "aquarium Temperature #2"
       id: temp_2
+      accuracy_decimals: 2
+      filters:
+      - sliding_window_moving_average:
+          window_size: 15
+          send_every: 5
 
 font:
   - file: "NotoSansMono-Regular.ttf"
