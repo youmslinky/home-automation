@@ -17,3 +17,7 @@ Sun 06/13/2021 12:17:50 PM
 can change the mqtt publish period with teleperiod
 easy way to do it is go to web interface console, and type `teleperiod xxx`
 type just `teleperiod` to get current value
+
+can set [latitude and longitude](https://tasmota.github.io/docs/Timers/?query=latitude) in order to have sunset and sunrise times be correct
+
+its important to set the timezone properly as well
