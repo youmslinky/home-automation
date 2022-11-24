@@ -35,14 +35,14 @@ binary_sensor:
       inverted: True
       mode: INPUT_PULLUP
 
-  - platform: gpio
-    name: "wall left button"
-    id: left_button
-    pin:
-      number: 35
-      inverted: True
-      mode: INPUT_PULLUP
-      # Example configuration entry
+  # - platform: gpio
+  #   name: "wall left button"
+  #   id: left_button
+  #   pin:
+  #     number: 35
+  #     inverted: True
+  #     mode: INPUT_PULLUP
+  #     # Example configuration entry
 
   - platform: esp32_touch
     name: "ESP32 Touch Pad GPIO2"
@@ -109,6 +109,7 @@ spi:
 
 display:
   - platform: st7789v
+    model: TTGO TDisplay 135x240
     backlight_pin: GPIO4
     cs_pin: GPIO5
     dc_pin: GPIO16
