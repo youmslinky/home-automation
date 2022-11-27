@@ -21,3 +21,11 @@ type just `teleperiod` to get current value
 can set [latitude and longitude](https://tasmota.github.io/docs/Timers/?query=latitude) in order to have sunset and sunrise times be correct
 
 its important to set the timezone properly as well
+
+I'm using chicago timezone on all devices now.
+`Backlog0 Timezone 99; TimeStd 0,1,11,1,2,-360; TimeDst 0,2,3,1,2,-300`
+
+but It may actually be better to just stick wihtout switching for DST, as animals don't care about that
+
+`backlog0` allows multiple commands strung together, without restarting at everyone.
+
