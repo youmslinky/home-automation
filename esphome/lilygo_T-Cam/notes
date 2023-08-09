@@ -1,0 +1,3 @@
+need to use the venv
+esphome needs min python version 3.9 now
+I've got 3.11 compiled on here, it is in the venv that is in this folder
